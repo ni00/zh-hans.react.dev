@@ -85,6 +85,8 @@ function handleClick() {
 
 * React 会 [批量处理状态更新](/learn/queueing-a-series-of-state-updates)。它会在所有 **事件处理函数运行** 并调用其 `set` 函数后更新屏幕。这可以防止在单个事件期间多次重新渲染。在某些罕见情况下，你需要强制 React 更早地更新屏幕，例如访问 DOM，你可以使用 [`flushSync`](/reference/react-dom/flushSync)。
 
+* `set` 函数具有稳定的标识，所以你经常会看到 Effect 的依赖数组中会省略它，即使包含它也不会导致 Effect 重新触发。如果 linter 允许你省略依赖项并且没有报错，那么你就可以安全地省略它。[了解移除 Effect 依赖项的更多信息。](/learn/removing-effect-dependencies#move-dynamic-objects-and-functions-inside-your-effect)
+
 * 在渲染期间，只允许在当前渲染组件内部调用 `set` 函数。React 将丢弃其输出并立即尝试使用新状态重新渲染。这种方式很少需要，但你可以使用它来存储 **先前渲染中的信息**。[请参见下面的示例](#storing-information-from-previous-renders)。
 
 * 在严格模式中，React 将 **两次调用你的更新函数**，以帮助你找到 [意外的不纯性](#my-initializer-or-updater-function-runs-twice)。这只是开发时的行为，不影响生产。如果你的更新函数是纯函数（本该是这样），就不应影响该行为。其中一次调用的结果将被忽略。
@@ -439,7 +441,7 @@ setForm({
 
 <Recipes titleText="状态中的对象和数组的示例" titleId="examples-objects">
 
-#### 表单（对象）{/*form-object*/}
+#### 表单（对象） {/*form-object*/}
 
 在此示例中，`form` 状态变量保存一个对象。每个输入框都有一个变更处理函数，用整个表单的下一个状态调用 `setForm`。`{ ...form }` 展开语法确保替换状态对象而不是改变它。
 
@@ -512,7 +514,7 @@ input { margin-left: 5px; }
 
 <Solution />
 
-#### 表单（嵌套对象）{/*form-nested-object*/}
+#### 表单（嵌套对象） {/*form-nested-object*/}
 
 在此示例中，状态更为嵌套。当你更新嵌套状态时，你需要复制一份正在更新的对象，以及向上“包含”它的所有对象。阅读 [更新嵌套对象](/learn/updating-objects-in-state#updating-a-nested-object) 以了解更多。
 
@@ -1089,7 +1091,7 @@ export default function CountLabel({ count }) {
 }
 ```
 
-假设你想显示计数器是否自上次更改以来 **增加或减少**。`count` props 无法告诉你这一点——你需要跟踪它的先前值。添加 `prevCount` 状态变量来跟踪它，再添加另一个状态变量 `trend` 来保存计数是否增加或减少。比较 `prevCount` 和 `count`，如果它们不相等，则更新 `prevCount` 和 `trend`。现在你既可以显示当前的 `count` props，也可以显示 **自上次渲染以来它如何改变**。
+假设你想显示计数器自上次更改以来是否有 **增加或减少**。`count` props 无法告诉你这一点——你需要跟踪它的先前值。添加 `prevCount` 状态变量来跟踪它，再添加另一个状态变量 `trend` 来保存计数是否增加或减少。比较 `prevCount` 和 `count`，如果它们不相等，则更新 `prevCount` 和 `trend`。现在你既可以显示当前的 `count` props，也可以显示 **自上次渲染以来它如何改变**。
 
 <Sandpack>
 
@@ -1261,7 +1263,7 @@ setTodos(prevTodos => {
 });
 ```
 
-现在，这个更新函数是纯粹的，所以多调用一次不会对行为产生影响。这就是为什么 React 调用它两次可以帮助你找到错误的原因。**只有组件、初始化函数和更新函数需要是纯粹的**。事件处理函数不需要是纯粹的，所以 React 不会两次调用你的事件处理函数。
+现在，这个更新函数是纯粹的，所以多调用一次不会对行为产生影响。这就是 React 调用它两次可以帮助你找到错误的原因。**只有组件、初始化函数和更新函数需要是纯粹的**。事件处理函数不需要是纯粹的，所以 React 不会两次调用你的事件处理函数。
 
 阅读 [保持组件纯粹](/learn/keeping-components-pure) 以了解更多信息。
 

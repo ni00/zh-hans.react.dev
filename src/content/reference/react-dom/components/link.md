@@ -1,14 +1,6 @@
 ---
 link: "<link>"
-canary: true
 ---
-
-<Canary>
-
-React 对 `<link>` 的扩展当前仅在 React Canary 与 experimental 渠道中可用。在 React 的稳定版本中，`<link>` 仅作为 [浏览器内置 HTML 组件](https://react.dev/reference/react-dom/components#all-html-components) 使用。
-请在 [此处了解更多关于 React 发布渠道的信息](/community/versioning-policy#all-release-channels)。
-
-</Canary>
 
 <Intro>
 
@@ -44,7 +36,7 @@ React 对 `<link>` 的扩展当前仅在 React Canary 与 experimental 渠道中
 
 当 `rel="stylesheet"` 时，应用以下属性：
 
-* `precedence`：字符串，用于告诉 React 在文档 `<head>` 中将 `<link>` DOM 节点排在其他节点之前的位置，这决定了哪个样式表可以覆盖其他样式表。它的值可以是（按优先级顺序）`"reset"`、`"low"`、`"medium"` 或 `"high"`。无论是 `<link>` 还是内联 `<style>` 标签，或者使用 [`preload`](/reference/react-dom/preload) 或 [`preinit`](/reference/react-dom/preinit) 函数加载的内容，具有相同优先级的样式表将一起处理。
+* `precedence`：字符串，用于告诉 React 在文档 `<head>` 中将 `<link>` DOM 节点排在其他节点之前的位置，这决定了哪个样式表可以覆盖其他样式表。React 会推断其首先发现的 `precedence` 值为“较低”，而后来发现的 `precedence` 值为“较高”。许多样式系统使用单个 `precedence` 值能够很好地工作，因为样式规则是原子的。无论是 `<link>` 还是内联 `<style>` 标签，或者使用 [`preinit`](/reference/react-dom/preinit) 函数加载的内容，具有相同优先级的样式表将一起处理。
 * `media`：字符串，用于将样式表限制为特定的 [媒体查询](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_media_queries/Using_media_queries)。
 * `title`：字符串，用于指定 [替代样式表](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Alternative_style_sheets) 的名称。
 
@@ -92,7 +84,7 @@ React 对 `<link>` 的扩展当前仅在 React Canary 与 experimental 渠道中
 
 此外，如果 `<link>` 指向的是样式表（即，在其属性中具有 `rel="stylesheet"`），React 会以以下方式对其进行特殊处理：
 
-* 渲染 `<link>` 的组件将在样式表加载时进行 [挂起](http://localhost:3000/reference/react/Suspense)。
+* 渲染 `<link>` 的组件将在样式表加载时进行 [挂起](/reference/react/Suspense)。
 * 如果多个组件渲染指向相同样式表的链接，React 将对它们进行去重，并只将单个链接放入 DOM 中。如果两个链接具有相同的 `href` 属性，则认为它们是相同的。
 
 但是，有两个例外情况：
@@ -134,7 +126,7 @@ export default function BlogPage() {
 
 ### 链接到样式表 {/*linking-to-a-stylesheet*/}
 
-如果一个组件依赖于某个样式表以正确显示，可以在组件内部渲染一个指向该样式表的链接。当样式表加载时，组件将会 [挂起](http://localhost:3000/reference/react/Suspense)。因此必须提供 `precedence` 属性，该属性告诉 React 将此样式表放置在其他样式表的何处——具有较高优先级的样式表可以覆盖较低优先级的样式表。
+如果一个组件依赖于某个样式表以正确显示，可以在组件内部渲染一个指向该样式表的链接。当样式表加载时，组件将会 [挂起](/reference/react/Suspense)。因此必须提供 `precedence` 属性，该属性告诉 React 将此样式表放置在其他样式表的何处——具有较高优先级的样式表可以覆盖较低优先级的样式表。
 
 <Note>
 当想使用样式表时，调用 [preinit](/reference/react-dom/preinit) 函数可能是有益的。调用此函数可能使浏览器比仅渲染一个 `<link>` 组件更早地开始获取样式表，例如通过发送 [HTTP 103 Early Hints 响应](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/103)。
@@ -159,7 +151,7 @@ export default function SiteMapPage() {
 
 ### 控制样式表优先级 {/*controlling-stylesheet-precedence*/}
 
-样式表可能会相互冲突，当发生冲突时，浏览器会选择文档中排在后面的样式表。React 允许使用 `precedence` 属性来控制样式表的顺序。在这个例子中，两个组件渲染样式表，具有较高优先级的组件在文档中排在较后位置，即使渲染它的组件出现在较早位置。
+样式表可能会相互冲突，当发生冲突时，浏览器会选择文档中排在后面的样式表。React 允许使用 `precedence` 属性来控制样式表的顺序。在这个例子中，三个组件渲染样式表，具有相同优先级的组件在 `<head>` 中将会被分组在一起。
 
 {/*FIXME: this doesn't appear to actually work -- I guess precedence isn't implemented yet?*/}
 
@@ -173,22 +165,29 @@ export default function HomePage() {
     <ShowRenderedHTML>
       <FirstComponent />
       <SecondComponent />
+      <ThirdComponent/>
       ...
     </ShowRenderedHTML>
   );
 }
 
 function FirstComponent() {
-  return <link rel="stylesheet" href="first.css" precedence="high" />;
+  return <link rel="stylesheet" href="first.css" precedence="first" />;
 }
 
 function SecondComponent() {
-  return <link rel="stylesheet" href="second.css" precedence="low" />;
+  return <link rel="stylesheet" href="second.css" precedence="second" />;
+}
+
+function ThirdComponent() {
+  return <link rel="stylesheet" href="third.css" precedence="first" />;
 }
 
 ```
 
 </SandpackWithHTMLOutput>
+
+Note the `precedence` values themselves are arbitrary and their naming is up to you. React will infer that precedence values it discovers first are "lower" and precedence values it discovers later are "higher".
 
 ### 去除样式表的重复渲染 {/*deduplicated-stylesheet-rendering*/}
 

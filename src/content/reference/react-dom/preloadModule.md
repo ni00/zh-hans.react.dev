@@ -1,13 +1,6 @@
 ---
 title: preloadModule
-canary: true
 ---
-
-<Canary>
-
-`preloadModule` 函数当前仅在 React Canary 与 experimental 渠道中可用，请在 [此处了解更多关于 React 发布渠道的信息](/community/versioning-policy#all-release-channels)。
-
-</Canary>
 
 <Note>
 
@@ -66,7 +59,7 @@ function AppRoot() {
 #### 注意 {/*caveats*/}
 
 * 对于相同的 `href`，多次调用 `preloadModule` 具有与单次调用相同的效果。
-* 在浏览器中，您可以在任何情况下调用 `preloadModule`：在渲染组件时、在 Effect 中以及在事件处理程序中等等。
+* 在浏览器中，你可以在任何情况下调用 `preloadModule`：在渲染组件时、在 Effect 中以及在事件处理程序中等等。
 * 在服务器端渲染或渲染服务器组件时，只有在渲染组件或在从渲染组件中发起的异步上下文中调用 `preloadModule` 时才会生效。任何其他调用都将被忽略。
 
 ---

@@ -10,14 +10,14 @@ on:
 jobs:
   event_type:
     runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v2
-      
+    steps:
+      - uses: actions/checkout@v3
+
       - name: Save Event Type
         run: echo ${{ github.event_name }} > ./event_type
 
       - name: Upload Event Type
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           path: ./event_type
           name: event_type
@@ -25,18 +25,26 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          cache: yarn
+          cache-dependency-path: yarn.lock
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1.7.10
+      - name: Restore cached node_modules
+        uses: actions/cache@v4
+        with:
+          path: "**/node_modules"
+          key: node_modules-${{ runner.arch }}-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Install deps
+        run: yarn install --frozen-lockfile
 
       - name: Restore next build
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: restore-build-cache
         env:
           cache-name: cache-next-build
@@ -55,17 +63,17 @@ jobs:
         run: npx -p nextjs-bundle-analysis@0.5.0 report
 
       - name: Upload bundle
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           path: .next/analyze/__bundle_analysis.json
           name: bundle_analysis.json
 
       - name: Download base branch bundle stats
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v3
         if: success()
         with:
           workflow: analyze.yml
-          branch: ${{ github.event.pull_request.base.ref || 'main' }} 
+          branch: ${{ github.event.pull_request.base.ref || 'main' }}
           name: bundle_analysis.json
           path: .next/analyze/base/bundle
 
@@ -87,27 +95,26 @@ jobs:
         run: ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
 
       - name: Upload analysis comment
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: analysis_comment.txt
           path: .next/analyze/__bundle_analysis_comment.txt
-          
+
   number:
     runs-on: ubuntu-latest
     needs: analyze
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Save PR number
         run: echo ${{ github.event.number }} > ./pr_number
 
       - name: Upload PR number
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: pr_number
           path: ./pr_number
 
       # The actual commenting happens in the other action, matching the guidance in
       # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
-      

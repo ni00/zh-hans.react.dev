@@ -1,8 +1,11 @@
 ---
 title: "介绍 react.dev"
+author: Dan Abramov and Rachel Nabors
+date: 2023/03/16
+description: 今天，我们非常高兴推出 react.dev，React 及其文档的新家。在本文中，我们想带你参观新网站。
 ---
 
-2023 年 3 月 16 日 [Dan Abramov](https://twitter.com/dan_abramov) 与 [Rachel Nabors](https://twitter.com/rachelnabors)
+2023 年 3 月 16 日 [Dan Abramov](https://bsky.app/profile/danabra.mov) 与 [Rachel Nabors](https://twitter.com/rachelnabors)
 
 ---
 
@@ -266,7 +269,7 @@ body {
 function Item({ name, isPacked }) {
   return (
     <li className="item">
-      {name} {isPacked && '✔'}
+      {name} {isPacked && '✅'}
     </li>
   );
 }
@@ -304,7 +307,7 @@ export default function PackingList() {
 function Item({ name, isPacked }) {
   return (
     <li className="item">
-      {name} {isPacked ? '✔' : '❌'}
+      {name} {isPacked ? '✅' : '❌'}
     </li>
   );
 }
@@ -610,7 +613,7 @@ button { display: block; margin-top: 10px; }
 
 ## 接下来还有什么 {/*whats-next*/}
 
-对新文档的介绍到此结束！浏览一下新网站，看看你喜欢或不喜欢什么，欢迎在 [匿名调查](https://www.surveymonkey.co.uk/r/PYRPF3X) 或 [问题跟踪器](https://github.com/reactjs/reactjs.org/issues) 中提供反馈。
+对新文档的介绍到此结束！浏览一下新网站，看看你喜欢或不喜欢什么，欢迎在 [匿名调查](https://www.surveymonkey.co.uk/r/PYRPF3X) 或 [问题跟踪器](https://github.com/reactjs/react.dev/issues) 中提供反馈。
 
 我们承认这个项目花费了很长时间才发布。我们希望 React 社区保持应该拥有的高质量标准。在编写这些文档和创建所有示例的过程中，我们发现了一些自己解释中的错误、React 中的错误，甚至是 React 设计中的空缺，我们现在正在努力解决。我们希望新文档将帮助我们在未来将 React 本身保持在更高的标准上。
 
@@ -628,7 +631,7 @@ button { display: block; margin-top: 10px; }
 
 ## 贡献者 {/*who-worked-on-this*/}
 
-在 React 团队中，[Rachel Nabors](https://twitter.com/rachelnabors/) 领导了该项目并提供了插图，而 [Dan Abramov](https://twitter.com/dan_abramov) 设计了课程。他们也共同撰写了大部分内容。
+在 React 团队中，[Rachel Nabors](https://twitter.com/rachelnabors/) 领导了该项目并提供了插图，而 [Dan Abramov](https://bsky.app/profile/danabra.mov) 设计了课程。他们也共同撰写了大部分内容。
 
 当然，没有一个这么大的项目是孤立进行的。我们有很多想要感谢的人！
 

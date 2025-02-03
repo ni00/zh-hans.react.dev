@@ -1,5 +1,8 @@
 ---
 title: "React v18.0"
+author: The React Team
+date: 2022/03/08
+description: React 18 现在可以在 npm 上使用啦！在我们的上一篇文章里，我们分享了将你的应用更新到 React 18 的分步说明。在这篇文章里，我们将会概述 React 18 究竟有哪些更新，以及这些更新对于未来的意义。
 ---
 
 2022 年 3 月 29 日，由 [React 团队](/community/team) 发布
@@ -8,7 +11,7 @@ title: "React v18.0"
 
 <Intro>
 
-React 18 现在可以在 npm 上使用啦！在我们的上一篇文章里，我们分享了 [将你的应用更新到 React 18](/blog/2022/03/08/react-18-upgrade-guide) 的每一个步骤。在这片文章里，我们将会概述 React 18 究竟有哪些更新，以及这些更新对于未来的意义。
+React 18 现在可以在 npm 上使用啦！在我们的上一篇文章里，我们分享了 [将你的应用更新到 React 18](/blog/2022/03/08/react-18-upgrade-guide) 的每一个步骤。在这篇文章里，我们将会概述 React 18 究竟有哪些更新，以及这些更新对于未来的意义。
 
 </Intro>
 
@@ -144,7 +147,7 @@ startTransition(() => {
 
 并发渲染中将会加入过渡更新，允许更新被中断。如果更新内容被重新挂起，过渡机制也会告诉 React 在后台渲染过渡内容时继续展示当前内容（查看 [Suspense 意见征求](https://github.com/reactjs/rfcs/blob/main/text/0213-suspense-in-react-18.md) 了解更多信息）。
 
-[更多内容请参阅 transition 相关的文档](/reference/react/useTransition)。
+[更多内容请参阅 Transition 相关的文档](/reference/react/useTransition)。
 
 ### 新的 Suspense 特性 {/*new-suspense-features*/}
 
@@ -162,7 +165,7 @@ Suspense 使得“UI 加载状态”成为了 React 编程模型中最高级的�
 
 在 React 18 中，我们已经支持了服务端 Suspense，并且使用并发渲染特性扩展了其功能。
 
-React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你在 transition 期间挂起，React 不会让已显示的内容被后备方案取代。相反，React 会延迟渲染，直到有足够的数据，以防止出现加载状态错误。
+React 18 中的 Suspense 在与 Transition API 结合时效果最好。如果你在 Transition 期间挂起，React 不会让已显示的内容被后备方案取代。相反，React 会延迟渲染，直到有足够的数据，以防止出现加载状态错误。
 
 更多内容参见 [React 18 中的 Suspense](https://github.com/reactjs/rfcs/blob/main/text/0213-suspense-in-react-18.md) 的意见征求。
 
@@ -177,7 +180,7 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 * `createRoot`：为 `render` 或者 `unmount` 创建根节点的新方法。请用它替代 `ReactDOM.render`。如果没有它，React 18 中的新功能就无法生效。
 * `hydrateRoot`：hydrate 服务端渲染的应用的新方法。使用它来替代 `ReactDOM.hydrate` 与新的 React DOM 服务端 API 一起使用。如果没有它，React 18 中的新功能就无法生效。
 
-`createRoot` 和 `hydrateRoot` 都能接受一个新的可选参数叫做 `onRecoverableError`，它能在 React 在渲染或者 hydrate 过程发生错误后又恢复时，做日志记录对你进行通知。默认情况下，React 会使用 [`reportError`](https://developer.mozilla.org/en-US/docs/Web/API/reportError)，如果在老旧版本浏览器中，则会使用 `console.error`。
+`createRoot` 和 `hydrateRoot` 都能接受一个新的可选参数叫做 `onRecoverableError`，它能在 React 在渲染或者激活过程发生错误后又恢复时，做日志记录对你进行通知。默认情况下，React 会使用 [`reportError`](https://developer.mozilla.org/en-US/docs/Web/API/reportError)，如果在老旧版本浏览器中，则会使用 `console.error`。
 
 
 [参阅 React DOM Client 的文档](/reference/react-dom/client)。
@@ -204,8 +207,8 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 
 ```
 * React 装载组件
-  * layout effect 创建
-  * effect 创建
+  * layout Effect 创建
+  * Effect 创建
 ```
 
 
@@ -213,14 +216,14 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 
 ```
 * React 挂载组件
-  * layout effect 创建
-  * effect 创建
+  * layout Effect 创建
+  * Effect 创建
 * React 模拟卸载组件
-  * layout effect 销毁
-  * effect 销毁
+  * layout Effect 销毁
+  * Effect 销毁
 * React 模拟挂载组件，并复用之前的状态
-  * layout effect 创建
-  * effect 创建
+  * layout Effect 创建
+  * Effect 创建
 ```
 
 [参阅确保状态可复用的文档](/reference/react/StrictMode#fixing-bugs-found-by-re-running-effects-in-development)。
@@ -229,7 +232,7 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 
 #### useId {/*useid*/}
 
-`useId` 是一个新的Hook，用于生成在客户端和服务端两侧都独一无二的 id，避免 hydrate 后两侧内容不匹配。它主要用于需要唯一 id 的，具有集成 API 的组件库。这个更新不仅解决了一个在 React 17 及更低版本中的存在的问题，而且它会在 React 18 中发挥更重要的作用，因为新的流式服务端渲染响应 HTML 的方式将是无序的，需要独一无二的 id 作为索引。[参阅文档](/reference/react/useId)。
+`useId` 是一个新的Hook，用于生成在客户端和服务端两侧都独一无二的 id，避免激活后两侧内容不匹配。它主要用于需要唯一 id 的，具有集成 API 的组件库。这个更新不仅解决了一个在 React 17 及更低版本中的存在的问题，而且它会在 React 18 中发挥更重要的作用，因为新的流式服务端渲染响应 HTML 的方式将是无序的，需要独一无二的 id 作为索引。[参阅文档](/reference/react/useId)。
 
 > Note
 >
@@ -253,7 +256,7 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 
 #### useInsertionEffect {/*useinsertioneffect*/}
 
-`useInsertionEffect` 是一个新的 Hook ，允许 CSS-in-JS 库解决在渲染中注入样式的性能问题。除非你已经建立了一个 CSS-in-JS 库，否则我们不希望你使用它。这个 Hook 将在 DOM 变更发生后，在 layout effect 获取新布局之前运行。这个功能不仅解决了一个在 React 17 及以下版本中已经存在的问题，而且在 React 18 中更加重要，因为 React 在并发渲染时会为浏览器让步，给它一个重新计算布局的机会。[参阅文档](/reference/react/useInsertionEffect)。
+`useInsertionEffect` 是一个新的 Hook ，允许 CSS-in-JS 库解决在渲染中注入样式的性能问题。除非你已经建立了一个 CSS-in-JS 库，否则我们不希望你使用它。这个 Hook 将在 DOM 变更发生后，在 layout Effect 获取新布局之前运行。这个功能不仅解决了一个在 React 17 及以下版本中已经存在的问题，而且在 React 18 中更加重要，因为 React 在并发渲染时会为浏览器让步，给它一个重新计算布局的机会。[参阅文档](/reference/react/useInsertionEffect)。
 
 > Note
 >
@@ -273,7 +276,7 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 * 添加 `startTransition` 作为 `useTransition` 的一个版本，不需要等待反馈。 ([#19696](https://github.com/facebook/react/pull/19696) [@rickhanlonii](https://github.com/rickhanlonii))
 * 添加 `useInsertionEffect` 用于 CSS-in-JS 库。([#21913](https://github.com/facebook/react/pull/21913) [@rickhanlonii](https://github.com/rickhanlonii))
 * 当内容重新出现时，使 Suspense 重新装载 layout effect。([#19322](https://github.com/facebook/react/pull/19322)，[#19374](https://github.com/facebook/react/pull/19374)，[#19523](https://github.com/facebook/react/pull/19523)，[#20625](https://github.com/facebook/react/pull/20625)，[#21079](https://github.com/facebook/react/pull/21079) [@acdlite](https://github.com/acdlite)，[@bvaughn](https://github.com/bvaughn)，and [@lunaruan](https://github.com/lunaruan))
-* 使 `<StrictMode>` 重新运行 effect 以检查可恢复的状态。([#19523](https://github.com/facebook/react/pull/19523) ，[#21418](https://github.com/facebook/react/pull/21418) [@bvaughn](https://github.com/bvaughn) and [@lunaruan](https://github.com/lunaruan))
+* 使 `<StrictMode>` 重新运行 Effect 以检查可恢复的状态。([#19523](https://github.com/facebook/react/pull/19523) ，[#21418](https://github.com/facebook/react/pull/21418) [@bvaughn](https://github.com/bvaughn) and [@lunaruan](https://github.com/lunaruan))
 * 假设 `Symbols` 总是可用的。([#23348](https://github.com/facebook/react/pull/23348) [@sebmarkbage](https://github.com/sebmarkbage))
 * 移除 `object-assign` polyfill。([#23351](https://github.com/facebook/react/pull/23351) [@sebmarkbage](https://github.com/sebmarkbage))
 * 移除不支持的 `unstable_changedBits` API。([#20953](https://github.com/facebook/react/pull/20953) [@acdlite](https://github.com/acdlite))
@@ -296,12 +299,12 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 * 修复生成的 License 头。([#23004](https://github.com/facebook/react/pull/23004) [@vitaliemiron](https://github.com/vitaliemiron))
 * 添加 `package.json` 作为入口点之一。 ([#22954](https://github.com/facebook/react/pull/22954) [@Jack](https://github.com/Jack-Works))
 * 允许在 Suspense 边界外挂起。([#23267](https://github.com/facebook/react/pull/23267) [@acdlite](https://github.com/acdlite))
-* 每当 hydrate 失败时记录一个可恢复的错误。([#23319](https://github.com/facebook/react/pull/23319) [@acdlite](https://github.com/acdlite))
+* 每当激活失败时记录一个可恢复的错误。([#23319](https://github.com/facebook/react/pull/23319) [@acdlite](https://github.com/acdlite))
 
 ### React DOM {/*react-dom*/}
 
 * 添加 `createRoot` 和 `hydrateRoot`。([#10239](https://github.com/facebook/react/pull/10239)，[#11225](https://github.com/facebook/react/pull/11225)，[#12117](https://github.com/facebook/react/pull/12117)，[#13732](https://github.com/facebook/react/pull/13732)，[#15502](https://github.com/facebook/react/pull/15502)，[#15532](https://github.com/facebook/react/pull/15532)，[#17035](https://github.com/facebook/react/pull/17035)，[#17165](https://github.com/facebook/react/pull/17165)，[#20669](https://github.com/facebook/react/pull/20669)，[#20748](https://github.com/facebook/react/pull/20748)，[#20888](https://github.com/facebook/react/pull/20888)，[#21072](https://github.com/facebook/react/pull/21072)，[#21417](https://github.com/facebook/react/pull/21417)，[#21652](https://github.com/facebook/react/pull/21652)，[#21687](https://github.com/facebook/react/pull/21687)，[#23207](https://github.com/facebook/react/pull/23207)，[#23385](https://github.com/facebook/react/pull/23385) [@acdlite](https://github.com/acdlite)，[@bvaughn](https://github.com/bvaughn)，[@gaearon](https://github.com/gaearon)，[@lunaruan](https://github.com/lunaruan)，[@rickhanlonii](https://github.com/rickhanlonii)，[@trueadm](https://github.com/trueadm)，and [@sebmarkbage](https://github.com/sebmarkbage))
-* 添加选择性 hydrate。([#14717](https://github.com/facebook/react/pull/14717)，[#14884](https://github.com/facebook/react/pull/14884)，[#16725](https://github.com/facebook/react/pull/16725)，[#16880](https://github.com/facebook/react/pull/16880)，[#17004](https://github.com/facebook/react/pull/17004)，[#22416](https://github.com/facebook/react/pull/22416)，[#22629](https://github.com/facebook/react/pull/22629)，[#22448](https://github.com/facebook/react/pull/22448)，[#22856](https://github.com/facebook/react/pull/22856)，[#23176](https://github.com/facebook/react/pull/23176) [@acdlite](https://github.com/acdlite)，[@gaearon](https://github.com/gaearon)，[@salazarm](https://github.com/salazarm)，and [@sebmarkbage](https://github.com/sebmarkbage))
+* 添加选择性激活。([#14717](https://github.com/facebook/react/pull/14717)，[#14884](https://github.com/facebook/react/pull/14884)，[#16725](https://github.com/facebook/react/pull/16725)，[#16880](https://github.com/facebook/react/pull/16880)，[#17004](https://github.com/facebook/react/pull/17004)，[#22416](https://github.com/facebook/react/pull/22416)，[#22629](https://github.com/facebook/react/pull/22629)，[#22448](https://github.com/facebook/react/pull/22448)，[#22856](https://github.com/facebook/react/pull/22856)，[#23176](https://github.com/facebook/react/pull/23176) [@acdlite](https://github.com/acdlite)，[@gaearon](https://github.com/gaearon)，[@salazarm](https://github.com/salazarm)，and [@sebmarkbage](https://github.com/sebmarkbage))
 * 在已知的 ARIA 属性列表中增加 `aria-description`。([#22142](https://github.com/facebook/react/pull/22142) [@mahyareb](https://github.com/mahyareb))
 * 为 video 元素添加 `onResize` 事件。([#21973](https://github.com/facebook/react/pull/21973) [@rileyjshaw](https://github.com/rileyjshaw))
 * 将 `imageSizes` 和 `imageSrcSet` 添加到已知属性中。([#22550](https://github.com/facebook/react/pull/22550) [@eps1lon](https://github.com/eps1lon))
@@ -325,7 +328,7 @@ React 18 中的 Suspense 在与 transition API 结合时效果最好。如果你
 * 支持使用 `global.IS_REACT_ACT_ENVIRONMENT` 禁用 act 警告。 ([#22561](https://github.com/facebook/react/pull/22561) [@acdlite](https://github.com/acdlite))
 * 扩大 act 警告，以覆盖所有可能预计 React 工作的 API。([#22607](https://github.com/facebook/react/pull/22607) [@acdlite](https://github.com/acdlite))
 * 使 act 批量更新。([#21797](https://github.com/facebook/react/pull/21797) [@acdlite](https://github.com/acdlite))
-* 移除对被挂起的 effect 的警告。([#22609](https://github.com/facebook/react/pull/22609) [@acdlite](https://github.com/acdlite))
+* 移除对被挂起的 Effect 的警告。([#22609](https://github.com/facebook/react/pull/22609) [@acdlite](https://github.com/acdlite))
 
 ### React Refresh {/*react-refresh*/}
 

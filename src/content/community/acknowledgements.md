@@ -4,7 +4,7 @@ title: 鸣谢
 
 <Intro>
 
-React 从最初由 [Jordan Walke](https://github.com/jordwalke) 创立至今, 已拥有 [专门的团队在全职从事这项工作](/community/team), 同时社区拥有超过 1k+ 的 [开源贡献者](https://github.com/facebook/react/blob/main/AUTHORS) 参与。
+React 最初由 [Jordan Walke](https://github.com/jordwalke) 创立。如今 React 拥有 [专门的全职团队](/community/team)以及超过 1000 名的 [开源贡献者](https://github.com/facebook/react/graphs/contributors)。
 
 </Intro>
 
@@ -16,6 +16,7 @@ React 从最初由 [Jordan Walke](https://github.com/jordwalke) 创立至今, �
 * [Andreas Svensson](https://github.com/syranide)
 * [Alex Krolick](https://github.com/alexkrolick)
 * [Alexey Pyltsyn](https://github.com/lex111)
+* [Andrey Lunyov](https://github.com/alunyov)
 * [Brandon Dail](https://github.com/aweary)
 * [Brian Vaughn](https://github.com/bvaughn)
 * [Caleb Meredith](https://github.com/calebmer)
@@ -35,6 +36,8 @@ React 从最初由 [Jordan Walke](https://github.com/jordwalke) 创立至今, �
 * [Joe Critchley](https://github.com/joecritch)
 * [Jeff Morrison](https://github.com/jeffmo)
 * [Luna Ruan](https://github.com/lunaruan)
+* [Luna Wei](https://github.com/lunaleaps)
+* [Noah Lemen](https://github.com/noahlemen)
 * [Kathryn Middleton](https://github.com/kmiddleton14)
 * [Keyan Zhang](https://github.com/keyz)
 * [Marco Salazar](https://github.com/salazarm)
@@ -50,15 +53,16 @@ React 从最初由 [Jordan Walke](https://github.com/jordwalke) 创立至今, �
 * [Samuel Susla](https://github.com/sammy-SC)
 * [Sander Spies](https://github.com/sanderspies)
 * [Sasha Aickin](https://github.com/aickin)
-* [Sean Keegan](https://github.com/seanryankeegan)
+* [Sathya Gunasekaran](https://github.com/gsathya)
 * [Sophia Shoemaker](https://github.com/mrscobbler)
 * [Sunil Pai](https://github.com/threepointone)
+* [Tianyu Yao](https://github.com/)
 * [Tim Yung](https://github.com/yungsters)
 * [Xuan Huang](https://github.com/huxpro)
 
 这份名单并不详尽。
 
-我们要特别感谢 [Tom Occhino](https://github.com/tomocchino) 和 [Adam Wolff](https://github.com/wolffiex)，感谢他们多年来的指导和支持。我们还要感谢所有 [将 React 翻译为其他语言的志愿者们](https://translations.reactjs.org/)。
+我们要特别感谢 [Tom Occhino](https://github.com/tomocchino) 和 [Adam Wolff](https://github.com/wolffiex) 多年来的指导和支持，以及所有 [将 React 翻译为其他语言的志愿者们](https://translations.react.dev/)。
 
 ## Additional Thanks {/*additional-thanks*/}
 

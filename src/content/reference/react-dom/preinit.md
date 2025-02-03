@@ -1,13 +1,6 @@
 ---
 title: preinit
-canary: true
 ---
-
-<Canary>
-
-`preinit` 函数当前仅在 React Canary 与 experimental 渠道中可用，请在 [此处了解更多关于 React 发布渠道的信息](/community/versioning-policy#all-release-channels)。
-
-</Canary>
 
 <Note>
 
@@ -20,7 +13,7 @@ canary: true
 `preinit` 可以预获取和评估样式表或外部脚本。
 
 ```js
-preinit("https://example.com/script.js", {as: "style"});
+preinit("https://example.com/script.js", {as: "script"});
 ```
 
 </Intro>

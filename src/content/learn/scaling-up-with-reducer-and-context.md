@@ -234,7 +234,7 @@ Reducer 有助于保持事件处理程序的简短明了。但随着应用规模
 />
 ```
 
-在像这样的小示例里这样做没什么问题，但是如果你有成千上百个组件，传递所有状态和函数可能会非常麻烦！
+在像这样的小示例里这样做没什么问题，但是如果你有成百上千个中间组件，传递所有状态和函数可能会非常麻烦！
 
 这就是为什么，比起通过 props 传递它们，你可能想把 `tasks` 状态和 `dispatch` 函数都 [放入 context](/learn/passing-data-deeply-with-context)。**这样，所有的在 `TaskApp` 组件树之下的组件都不必一直往下传 props 而可以直接读取 tasks 和 dispatch 函数**。
 
@@ -455,7 +455,7 @@ ul, li { margin: 0; padding: 0; }
 
 在这里，你把 `null` 作为默认值传递给两个 context。实际值是由 `TaskApp` 组件提供的。
 
-### 第二步: 将 state 和 dispatch 函数 放入 context {/*step-2-put-state-and-dispatch-into-context*/}
+### 第二步: 将 state 和 dispatch 函数放入 context {/*step-2-put-state-and-dispatch-into-context*/}
 
 现在，你可以将所有的 context 导入 `TaskApp` 组件。获取 `useReducer()` 返回的 `tasks` 和 `dispatch` 并将它们 [提供](/learn/passing-data-deeply-with-context#step-3-provide-the-context) 给整个组件树：
 

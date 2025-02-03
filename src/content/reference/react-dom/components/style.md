@@ -1,13 +1,6 @@
 ---
 style: "<style>"
-canary: true
 ---
-
-<Canary>
-
-React 对 `<style>` 的扩展当前仅在 React Canary 与 experimental 渠道中可用。在 React 的稳定版本中，`<style>` 仅作为 [浏览器内置 HTML 组件](https://react.dev/reference/react-dom/components#all-html-components) 使用。请在 [此处了解更多关于 React 发布渠道的信息](/community/versioning-policy#all-release-channels)。
-
-</Canary>
 
 <Intro>
 
@@ -40,7 +33,7 @@ React 对 `<style>` 的扩展当前仅在 React Canary 与 experimental 渠道�
 `<style>` 支持所有 [常见元素属性](/reference/react-dom/components/common#props)。
 
 * `children`：字符串，必需字段，表示样式表的内容。
-* `precedence`：字符串，告诉 React 在文档 `<head>` 中排列 `<style>` DOM 节点的位置，确定哪个样式表可以覆盖另一个，可能的值包括（按优先级排序）`"reset"`、`"low"`、`"medium"` 与 `"high"`。无论是 `<link>` 还是内联 `<style>` 标签，或者使用 [`preload`](/reference/react-dom/preload) 或 [`preinit`](/reference/react-dom/preinit) 函数加载的样式表，具有相同优先级的将一起处理。
+* `precedence`：字符串，告诉 React 在文档 `<head>` 中排列 `<style>` DOM 节点的位置，确定哪个样式表可以覆盖另一个。React 会推断其首先发现的 `precedence` 值为“较低”，而后来发现的 `precedence` 值为“较高”。许多样式系统使用单个 `precedence` 值能够很好地工作，因为样式规则是原子的。无论是 `<link>` 还是内联 `<style>` 标签，或者使用 [`preinit`](/reference/react-dom/preinit) 函数加载的样式表，具有相同优先级的将一起处理。
 * `href`：字符串，允许 React [对 `href` 相同的样式进行去重](#special-rendering-behavior)。
 * `media`：字符串，将样式表限制为特定的 [媒体查询](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)。
 * `nonce`：字符串，表示使用严格内容安全策略时允许资源的 [加密随机数](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/nonce)。
@@ -69,7 +62,11 @@ React 可以将 `<style>` 组件移动到文档的 `<head>` 中，去重相同�
 
 如果一个组件依赖于某些 CSS 样式以正确显示，可以在组件内部渲染一个内联样式表。
 
-如果提供了 `href` 和 `precedence` 属性，组件将在样式表加载时挂起（即使是内联样式表，由于样式表引用的字体和图像，可能也会有加载时间）。`href` 属性应该唯一地标识样式表，因为 React 将对 `href` 的样式表进行去重。
+`href` 属性应该在样式表中唯一，因为 React 会删除具有相同 `href` 属性的重复样式表。
+如果你提供了 `precedence` 属性，React 将根据这些值在组件树中出现的顺序对内联样式表重新排序。
+
+内联样式表在加载时不会触发 Suspense 边界。
+即使他们加载字体或图像等异步资源。
 
 <SandpackWithHTMLOutput>
 

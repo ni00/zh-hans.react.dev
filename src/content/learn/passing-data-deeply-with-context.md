@@ -207,9 +207,9 @@ export default function Heading({ level, children }) {
 
 你不能只通过 props 来实现它。这就是 context 大显身手的地方。你可以通过以下三个步骤来实现它：
 
-1. **创建** 一个 context。（你可以将其命名为 `LevelContext`, 因为它表示的是标题级别。)
+1. **创建** 一个 context。（你可以将其命名为 `LevelContext`, 因为它表示的是标题级别。）
 2. 在需要数据的组件内 **使用** 刚刚创建的 context。（`Heading` 将会使用 `LevelContext`。）
-3. 在指定数据的组件中 **提供** 这个 context。 （`Section` 将会提供 `LevelContext`。）
+3. 在指定数据的组件中 **提供** 这个 context。（`Section` 将会提供 `LevelContext`。）
 
 Context 可以让父节点，甚至是很远的父节点都可以为其内部的整个组件树提供数据。
 
@@ -463,7 +463,7 @@ export default function Section({ children }) {
 }
 ```
 
-**把它们用 context provider 包裹起来**  以提供 `LevelContext` 给它们：
+**把它们用 context provider 包裹起来** 以提供 `LevelContext` 给它们：
 
 ```js {1,6,8}
 import { LevelContext } from './LevelContext.js';
@@ -883,7 +883,7 @@ Context 不局限于静态值。如果你在下一次渲染时传递不同的值
 
 #### 用 context 替代逐层 props {/*replace-prop-drilling-with-context*/}
 
-在这个示例中，切换复选框状态会修改传入每个 `<PlaceImage>` 的 `imageSize` 参数。复选框的 state 保存在顶层的 `App` 组件中，但是每个 `<PlaceImage>` 都需要注意它。
+在这个示例中，切换复选框状态会修改传入每个 `<PlaceImage>` 的 `imageSize` 参数。复选框的 state 保存在顶层的 `App` 组件中，但是每个 `<PlaceImage>` 都需要知晓它的值。
 
 目前，`App` 将 `imageSize` 传递给 `List`，`List` 再将其传递给每个 `Place`，`Place` 又将其传递给 `PlaceImage`。移除 `imageSize` 参数，并在 `App` 组件中直接将其传递给 `PlaceImage`。
 

@@ -29,11 +29,11 @@
           "path": "/learn/start-a-new-react-project"
         },
         {
-          "title": "将 React 添加到已有项目中",
+          "title": "将 React 添加到现有项目中",
           "path": "/learn/add-react-to-an-existing-project"
         },
         {
-          "title": "编辑器配置",
+          "title": "编辑器设置",
           "path": "/learn/editor-setup"
         },
         {
@@ -43,6 +43,11 @@
         {
           "title": "React 开发者工具",
           "path": "/learn/react-developer-tools"
+        },
+        {
+          "title": "React Compiler",
+          "path": "/learn/react-compiler",
+          "canary": true
         }
       ]
     },
@@ -56,7 +61,7 @@
       "path": "/learn/describing-the-ui",
       "routes": [
         {
-          "title": "第一个组件",
+          "title": "你的第一个组件",
           "path": "/learn/your-first-component"
         },
         {
@@ -177,7 +182,7 @@
           "path": "/learn/manipulating-the-dom-with-refs"
         },
         {
-          "title": "使用 Effect 同步",
+          "title": "使用 Effect 进行同步",
           "path": "/learn/synchronizing-with-effects"
         },
         {

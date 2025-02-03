@@ -1,8 +1,11 @@
 ---
 title: "React Labs：我们正在努力的方向——2024 年 2 月"
+author: Joseph Savona, Ricky Hanlon, Andrew Clark, Matt Carroll, and Dan Abramov
+date: 2024/02/15
+description: 在 React Labs 的文章中，我们讲述了正在进行研究与开发的项目。自上次更新以来，我们又取得了巨大进展，现在我们想将这些内容分享给大家。
 ---
 
-2024 年 2 月 15 日 [Joseph Savona](https://twitter.com/en_JS)、[Ricky Hanlon](https://twitter.com/rickhanlonii)、[Andrew Clark](https://twitter.com/acdlite)、[Matt Carroll](https://twitter.com/mattcarrollcode) 与 [Dan Abramov](https://twitter.com/dan_abramov)
+2024 年 2 月 15 日 [Joseph Savona](https://twitter.com/en_JS)、[Ricky Hanlon](https://twitter.com/rickhanlonii)、[Andrew Clark](https://twitter.com/acdlite)、[Matt Carroll](https://twitter.com/mattcarrollcode) 与 [Dan Abramov](https://bsky.app/profile/danabra.mov)
 
 ---
 
@@ -28,7 +31,7 @@ React 编译器不再是一个研究项目：该编译器现在已经在生产�
 
 正如我们在 [之前的文章](/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-optimizing-compiler) 中所讨论的，当状态发生变化时，React 有时会过度重新渲染。自 React 早期以来，我们对这种情况的解决方案一直是手动记忆化。在我们当前的 API 中，这意味着使用 [`useMemo`](/reference/react/useMemo)、[`useCallback`](/reference/react/useCallback) 和 [`memo`](/reference/react/memo) API 手动调整 React 在状态变化时重新渲染的程度。但是手动记忆化是一种妥协。它会使我们的代码变得混乱、很容易出错，并且需要额外的工作来保持更新。
 
-手动记忆化是一个合理的妥协，但我们并不满意。我们的愿景是当状态发生变化时 React 可以自动重新渲染 UI 的恰当部分，而不是向 React 的核心心智模型妥协。我们相信 React 的方式——将 UI 视为状态的简单函数，使用标准的 JavaScript 值和习惯用法——是 React 为许多开发人员提供可接近性的关键部分。这就是为什么我们投资于构建 React 的优化编译器的原因。
+手动记忆化是一个合理的妥协，但我们并不满意。我们的愿景是当状态发生变化时 React 可以自动重新渲染 UI 的恰当部分，而不是向 React 的核心心智模型妥协。我们相信 React 的方式——将 UI 视为状态的简单函数，使用标准的 JavaScript 值和习惯用法——是 React 为许多开发人员提供可接近性的关键部分。这就是我们投资于构建 React 的优化编译器的原因。
 
 JavaScript 是一个因其松散规则和动态特性而闻名的具有挑战性的语言。React 编译器能够通过模拟 JavaScript 的规则和“React 的规则”来安全地编译代码。例如，React 组件必须是幂等的——给定相同的输入返回相同的值——并且不能突变 props 或状态值。这些规则限制了开发人员可以做的事情，并为编译器优化开辟了一个安全的空间。
 
@@ -52,7 +55,7 @@ JavaScript 是一个因其松散规则和动态特性而闻名的具有挑战性
 </form>
 ```
 
-`action` 函数可以同步或异步执行。你可以在客户端使用标准 JavaScript 定义它们，也可以在服务器上使用 [`'use server'`](/reference/react/use-server) 指示符。当使用 action 时，React 将帮助管理数据提交的生命周期，提供类似 [`useFormStatus`](/reference/react-dom/hooks/useFormStatus) 和 [`useFormState`](/reference/react-dom/hooks/useFormState) 的 Hook，以访问表单操作的当前 state 与响应。
+`action` 函数可以同步或异步执行。你可以在客户端使用标准 JavaScript 定义它们，也可以在服务器上使用 [`'use server'`](/reference/rsc/use-server) 指示符。当使用 action 时，React 将帮助管理数据提交的生命周期，提供类似 [`useFormStatus`](/reference/react-dom/hooks/useFormStatus) 和 [`useActionState`](/reference/react/useActionState) 的 Hook，以访问表单操作的当前 state 与响应。
 
 默认情况下，Action 在 [transition](/reference/react/useTransition) 中提交，使当前页面在操作处理过程中保持交互性。由于 Action 支持异步函数，我们还添加了在 transitions 中使用 `async/await` 的功能，这允许在异步请求（如 `fetch`）开始时使用转换的 `isPending` 状态显示待处理 UI，并在应用更新时始终显示待处理 UI。
 
@@ -60,9 +63,9 @@ JavaScript 是一个因其松散规则和动态特性而闻名的具有挑战性
 
 库作者可以使用 `useTransition` 在自己的组件中实现自定义 `action={fn}` props。我们的目的是，当设计他们的组件 API 时，库应采用 Action 模式，为 React 开发人员提供一致的体验。例如，如果你的库提供了一个 `<Calendar onSelect={eventHandler}>` 组件，则还可以考虑暴露一个 `<Calendar selectAction={action}>` API。
 
-尽管我们最初专注于 Server Action 用于客户端/服务器数据传输，但我们对 React 的理念是在所有平台和环境中提供相同的编程模型。在可能的情况下，如果我们在客户端引入一个功能，我们也会使它在服务器上起作用，反之亦然。这一理念使我们能够创建一组 API，无论您的应用在何处运行，都可以工作，从而使以后更容易升级到不同的环境。
+尽管我们最初专注于 Server Action 用于客户端/服务器数据传输，但我们对 React 的理念是在所有平台和环境中提供相同的编程模型。在可能的情况下，如果我们在客户端引入一个功能，我们也会使它在服务器上起作用，反之亦然。这一理念使我们能够创建一组 API，无论你的应用在何处运行，都可以工作，从而使以后更容易升级到不同的环境。
 
-Action 现在在 Canary 通道中可用，并将在下一个 React 发布版本中发布。
+Action 现在在 Canary 渠道中可用，并将在下一个 React 发布版本中发布。
 
 ## React Canary 版本中的新特性 {/*new-features-in-react-canary*/}
 
@@ -72,13 +75,13 @@ Canaries 是我们开发 React 的一种变化。以前，功能会在 Meta 内�
 
 React 服务器组件、资源加载、文档元数据与 Action 都已经加入了 React Canary，并且我们已经在 react.dev 上为这些功能添加了文档：
 
-- **指示符**：[`"use client"`](/reference/react/use-client) 与 [`"use server"`](/reference/react/use-server) 是设计用于全栈 React 框架的打包功能。它们标记了两个环境之间的“分割点”：use client 指示符指示打包工具生成一个 `<script>` 标签（类似于 [Astro Islands](https://docs.astro.build/en/concepts/islands/#creating-an-island)），而 use server 告诉打包工具生成一个 POST 端点（类似于 [tRPC Mutations](https://trpc.io/docs/concepts)）。它们让你可以编写将客户端交互性与相关的服务器端逻辑组合在一起的可重用组件。
+- **指示符**：[`"use client"`](/reference/rsc/use-client) 与 [`"use server"`](/reference/rsc/use-server) 是设计用于全栈 React 框架的打包功能。它们标记了两个环境之间的“分割点”：use client 指示符指示打包工具生成一个 `<script>` 标签（类似于 [Astro Islands](https://docs.astro.build/en/concepts/islands/#creating-an-island)），而 use server 告诉打包工具生成一个 POST 端点（类似于 [tRPC Mutations](https://trpc.io/docs/concepts)）。它们让你可以编写将客户端交互性与相关的服务器端逻辑组合在一起的可重用组件。
 
 - **文档元数据**：我们内置支持在组件树中的任何位置渲染 [`<title>`](/reference/react-dom/components/title)、[`<meta>`](/reference/react-dom/components/meta) 和元数据 [`<link>`](/reference/react-dom/components/link) 标签。这些在所有环境中都以相同的方式工作，包括完全客户端代码、SSR 和 RSC。这为像 [React Helmet](https://github.com/nfl/react-helmet) 这样的库开创的功能提供了内置支持。
 
 - **资源加载**：我们将 Suspense 与样式表、字体和脚本等资源的加载生命周期集成在一起，以便 React 考虑它们来确定像 [`<style>`](/reference/react-dom/components/style)、[`<link>`](/reference/react-dom/components/link) 和 [`<script>`](/reference/react-dom/components/script) 这样的元素中的内容是否已准备就绪。我们还添加了新的 [资源加载 API](/reference/react-dom#resource-preloading-apis)，如 `preload` 和 `preinit`，以提供更大的控制权，指示何时应加载和初始化资源。
 
-- **Action**：如上所述，我们已将 Action 添加到管理从客户端发送数据到服务器的功能中。现在可以将 `action` 添加到像 [`<form/>`](/reference/react-dom/components/form) 这样的元素中，使用 [`useFormStatus`](/reference/react-dom/hooks/useFormStatus) 访问状态，使用 [`useFormState`](/reference/react-dom/hooks/useFormState) 处理结果，并使用 [`useOptimistic`](/reference/react/useOptimistic) 乐观地更新 UI。
+- **Action**：如上所述，我们已将 Action 添加到管理从客户端发送数据到服务器的功能中。现在可以将 `action` 添加到像 [`<form/>`](/reference/react-dom/components/form) 这样的元素中，使用 [`useFormStatus`](/reference/react-dom/hooks/useFormStatus) 访问状态，使用 [`useActionState`](/reference/react/useActionState) 处理结果，并使用 [`useOptimistic`](/reference/rsc/useOptimistic) 乐观地更新 UI。
 
 由于所有这些功能是相互配合的，因此单独在稳定渠道中发布它们是困难的。发布 Action 而不带有用于访问表单状态的补充 Hook 会限制 Action 的实际可用性。引入 React 服务器组件而不集成 Server Action 会把在服务器上修改数据变得复杂化。
 

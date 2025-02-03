@@ -104,7 +104,7 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="/styles.css"></link>
-        <title>My app</title>
+        <title>我的应用</title>
       </head>
       <body>
         <Router />
@@ -178,7 +178,7 @@ app.use('/', (request, response) => {
 });
 ```
 
-因为你的服务端正在渲染 `<App assetMap={assetMap} />`，所以你还需要在客户端将这个带有 `assetMap` 的组件再渲染一次进行同构，以此避免 hydrate 错误。你可以像下面这样序列化 `assetMap` 之后再传递：
+因为你的服务端正在渲染 `<App assetMap={assetMap} />`，所以你还需要在客户端将这个带有 `assetMap` 的组件再渲染一次进行同构，以此避免激活错误。你可以像下面这样序列化 `assetMap` 之后再传递：
 
 ```js {9-10}
 // 你需要从你的打包构建工具中获取这个 JSON。
@@ -209,7 +209,7 @@ import App from './App.js';
 hydrateRoot(document, <App assetMap={window.assetMap} />);
 ```
 
-这样一来，客户端和服务端都渲染了带有 `assetMap` 属性的 `App`，因此它们是同构的，就不会出现 hydrate 异常错误。
+这样一来，客户端和服务端都渲染了带有 `assetMap` 属性的 `App`，因此它们是同构的，就不会出现激活异常错误。
 
 </DeepDive>
 
@@ -431,7 +431,7 @@ function ProfilePage() {
 }
 ```
 
-If an error happens in the `Posts` component or somewhere inside it, React will [try to recover from it:](/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content)
+如果在 `Posts` 组件或其内部某处发生错误，React 将 [尝试从中恢复](/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content)：
 
 1. 它将用在结构上和异常发生的位置最近的一个父级 `<Suspense>` 的加载中的后备方案（`PostsGlimmer`）替代这段 HTML。
 2. 它将会“放弃”尝试在服务端渲染 `Posts` 组件的内容。

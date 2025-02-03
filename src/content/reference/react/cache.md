@@ -3,11 +3,11 @@ title: cache
 canary: true
 ---
 
-<Canary>
-* `cache` 仅供与 [React 服务器组件](/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components) 一起使用。请参阅支持 React 服务器组件的 [框架](/learn/start-a-new-react-project#bleeding-edge-react-frameworks)。
+<RSC>
+* `cache` 仅供与 [React 服务器组件](/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components) 一起使用。
 
 * `cache` 仅在 React 的 [Canary](/community/versioning-policy#canary-channel) 和 [experimental](/community/versioning-policy#experimental-channel) 渠道中可用。在将 `cache` 用于生产环境之前，请确保了解其限制。查看此处了解有关 [React 发布渠道的更多信息](/community/versioning-policy#all-release-channels)。
-</Canary>
+</RSC>
 
 <Intro>
 
@@ -226,7 +226,7 @@ async function AnimatedWeatherCard({city}) {
 ```jsx [[2, 6, "await getUser(id)"], [1, 17, "getUser(id)"]]
 const getUser = cache(async (id) => {
   return await db.user.query(id);
-}
+});
 
 async function Profile({id}) {
   const user = await getUser(id);
@@ -327,7 +327,7 @@ React 只允许在组件内访问记忆化函数的缓存。在组件外部调�
 'use client';
 
 function WeatherReport({record}) {
-  const avgTemp = useMemo(() => calculateAvg(record)), record);
+  const avgTemp = useMemo(() => calculateAvg(record), record);
   // ...
 }
 

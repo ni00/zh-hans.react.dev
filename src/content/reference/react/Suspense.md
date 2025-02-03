@@ -31,7 +31,7 @@ title: <Suspense>
 
 - 在组件首次挂载前，如果组件被挂起，那么 React 将不会保留其任何状态。当组件完成加载后，React 将从头开始重新尝试渲染被挂起的组件树。
 - 如果 Suspense 正在展示 React 组件树中的内容，那么当再次被挂起时，除非导致此处更新是由 [`startTransition`](/reference/react/startTransition) 或 [`useDeferredValue`](/reference/react/useDeferredValue) 引起，否则 Suspense 将展示 `fallback`。
-- 如果 React 需要隐藏被再次挂起的可见内容，它将清理内容树中的 [layout effect](/reference/react/useLayoutEffect)。当内容可以被再次展示时，React 将重新触发 layout effect。这确保了测量 DOM 布局的 effect 不会在内容不可见时运行。
+- 如果 React 需要隐藏被再次挂起的可见内容，它将清理内容树中的 [layout Effect](/reference/react/useLayoutEffect)。当内容可以被再次展示时，React 将重新触发 layout Effect。这确保了测量 DOM 布局的 Effect 不会在内容不可见时运行。
 - React 带有内置优化，例如 **流式服务器渲染（Streaming Server Rendering）** 和 **Selective Hydration**，它们已经与 Suspense 集成。参见 [架构概述](https://github.com/reactwg/react-18/discussions/37) 并观看 [技术讲座](https://www.youtube.com/watch?v=pj5N-Khihgc) 以了解更多。
 
 ---
@@ -53,21 +53,6 @@ React 将展示 <CodeStep step={1}>后备方案</CodeStep> 直到 <CodeStep step
 在下面的例子中，`Albums` 组件在获取专辑列表时被 **挂起**。在它准备好渲染前，`Albums` 祖先组件中距离其最近的 Suspense 将展示后备方案 —— 即 `Loading` 组件。当数据加载完成时，React 会隐藏 `Loading` 后备方案并渲染带有数据的 `Albums` 组件。
 
 <Sandpack>
-
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
 
 ```js src/App.js hidden
 import { useState } from 'react';
@@ -114,14 +99,9 @@ function Loading() {
 }
 ```
 
-```js src/Albums.js hidden
+```js src/Albums.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 在实际的例子中，你可以尝试已经
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
@@ -134,31 +114,6 @@ export default function Albums({ artistId }) {
       ))}
     </ul>
   );
-}
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
 }
 ```
 
@@ -252,9 +207,9 @@ async function getAlbums() {
 
 **只有启用了 Suspense 的数据源才会激活 Suspense 组件**，它们包括：
 
-- 支持 Suspense 的框架如 [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) 和 [Next.js](https://nextjs.org/docs/getting-started/react-essentials)。
+- 支持 Suspense 的框架如 [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) 和 [Next.js](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming#streaming-with-suspense)。
 - 使用 [`lazy`](/reference/react/lazy) 懒加载组件代码。
-- 使用 [`use`](/reference/react/use) 读取 Promise 的值。
+- 使用 [`use`](/reference/react/use) 读取缓存的 Promise 值。
 
 Suspense **无法** 检测在 Effect 或事件处理程序中获取数据的情况。
 
@@ -284,21 +239,6 @@ Suspense **无法** 检测在 Effect 或事件处理程序中获取数据的情�
 在下面的例子中，`Biography` 和 `Albums` 都会获取一些数据。但是由于它们都处于同一个 Suspense 下，所以这些组件总是一起“浮现”。
 
 <Sandpack>
-
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
 
 ```js src/App.js hidden
 import { useState } from 'react';
@@ -360,14 +300,9 @@ export default function Panel({ children }) {
 }
 ```
 
-```js src/Biography.js hidden
+```js src/Biography.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Biography({ artistId }) {
   const bio = use(fetchData(`/${artistId}/bio`));
@@ -377,41 +312,11 @@ export default function Biography({ artistId }) {
     </section>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Albums.js hidden
+```js src/Albums.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
@@ -424,31 +329,6 @@ export default function Albums({ artistId }) {
       ))}
     </ul>
   );
-}
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
 }
 ```
 
@@ -604,26 +484,11 @@ function Details({ artistId }) {
 加载序列将会是：
 
 1. 如果 `Biography` 没有加载完成，`BigSpinner` 会显示在整个内容区域的位置。
-1. 一旦 `Biography` 加载完成，`BigSpinner` 会被内容替换。
-1. 如果 `Albums` 没有加载完成，`AlbumsGlimmer` 会显示在 `Albums` 和它的父级 `Panel` 的位置。
-1. 最后，一旦 `Albums` 加载完成，它会替换 `AlbumsGlimmer`。
+2. 一旦 `Biography` 加载完成，`BigSpinner` 会被内容替换。
+3. 如果 `Albums` 没有加载完成，`AlbumsGlimmer` 会显示在 `Albums` 和它的父级 `Panel` 的位置。
+4. 最后，一旦 `Albums` 加载完成，它会替换 `AlbumsGlimmer`。
 
 <Sandpack>
-
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
 
 ```js src/App.js hidden
 import { useState } from 'react';
@@ -697,14 +562,9 @@ export default function Panel({ children }) {
 }
 ```
 
-```js src/Biography.js hidden
+```js src/Biography.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Biography({ artistId }) {
   const bio = use(fetchData(`/${artistId}/bio`));
@@ -714,41 +574,11 @@ export default function Biography({ artistId }) {
     </section>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Albums.js hidden
+```js src/Albums.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
@@ -761,31 +591,6 @@ export default function Albums({ artistId }) {
       ))}
     </ul>
   );
-}
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
 }
 ```
 
@@ -929,21 +734,6 @@ Suspense 边界允许协调 UI 的哪些部分应该总是一起“浮现”，�
 
 <Sandpack>
 
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
-
 ```js src/App.js
 import { Suspense, useState } from 'react';
 import SearchResults from './SearchResults.js';
@@ -964,14 +754,9 @@ export default function App() {
 }
 ```
 
-```js src/SearchResults.js hidden
+```js src/SearchResults.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function SearchResults({ query }) {
   if (query === '') {
@@ -990,31 +775,6 @@ export default function SearchResults({ query }) {
       ))}
     </ul>
   );
-}
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
 }
 ```
 
@@ -1154,21 +914,6 @@ export default function App() {
 
 <Sandpack>
 
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
-
 ```js src/App.js
 import { Suspense, useState, useDeferredValue } from 'react';
 import SearchResults from './SearchResults.js';
@@ -1194,13 +939,8 @@ export default function App() {
 ```
 
 ```js src/SearchResults.js hidden
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function SearchResults({ query }) {
   if (query === '') {
@@ -1219,31 +959,6 @@ export default function SearchResults({ query }) {
       ))}
     </ul>
   );
-}
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
 }
 ```
 
@@ -1360,21 +1075,6 @@ input { margin: 10px; }
 
 <Sandpack>
 
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
-
 ```js src/App.js
 import { Suspense, useState } from 'react';
 import IndexPage from './IndexPage.js';
@@ -1479,14 +1179,9 @@ function AlbumsGlimmer() {
 }
 ```
 
-```js src/Albums.js hidden
+```js src/Albums.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
@@ -1500,41 +1195,11 @@ export default function Albums({ artistId }) {
     </ul>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Biography.js hidden
+```js src/Biography.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Biography({ artistId }) {
   const bio = use(fetchData(`/${artistId}/bio`));
@@ -1544,34 +1209,9 @@ export default function Biography({ artistId }) {
     </section>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Panel.js hidden
+```js src/Panel.js
 export default function Panel({ children }) {
   return (
     <section className="panel">
@@ -1741,24 +1381,9 @@ function Router() {
   // ...
 ```
 
-这告诉 React 此 state transition 是不紧急的，最好继续显示上一页，而不是隐藏任何已经显示的内容。现在点击按钮并等待 `Biography` 加载：
+这告诉 React 这个状态转移是不紧急的，最好继续显示上一页，而不是隐藏任何已经显示的内容。现在点击按钮并等待 `Biography` 加载：
 
 <Sandpack>
-
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
 
 ```js src/App.js
 import { Suspense, startTransition, useState } from 'react';
@@ -1866,14 +1491,9 @@ function AlbumsGlimmer() {
 }
 ```
 
-```js src/Albums.js hidden
+```js src/Albums.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
@@ -1887,41 +1507,11 @@ export default function Albums({ artistId }) {
     </ul>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Biography.js hidden
+```js src/Biography.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Biography({ artistId }) {
   const bio = use(fetchData(`/${artistId}/bio`));
@@ -1931,34 +1521,9 @@ export default function Biography({ artistId }) {
     </section>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Panel.js hidden
+```js src/Panel.js
 export default function Panel({ children }) {
   return (
     <section className="panel">
@@ -2112,36 +1677,21 @@ main {
 
 </Sandpack>
 
-transition 并不会等待 **所有** 内容加载完成。它只会等待足够长的时间，以避免隐藏已经显示的内容。例如，网站 `Layout` 已经显示，所以将其隐藏在加载中指示器后面是不好的。然而，`Albums` 周围的嵌套 `Suspense` 边界是新出现的，所以 transition 不会等待它。
+transition 并不会等待 **所有** 内容加载完成。它只会等待足够长的时间，以避免隐藏已经显示的内容。例如，网站 `Layout` 已经显示，所以将其隐藏在加载中指示器后面是不好的。然而，`Albums` 周围的嵌套 `Suspense` 边界是新出现的，所以 Transition 不会等待它。
 
 <Note>
 
-启用了 Suspense 的路由在默认情况下会将导航更新包装至 transition 中。
+启用了 Suspense 的路由在默认情况下会将导航更新包装至 Transition 中。
 
 </Note>
 
 ---
 
-### 表明 transition 正在发生 {/*indicating-that-a-transition-is-happening*/}
+### 表明 Transition 正在发生 {/*indicating-that-a-transition-is-happening*/}
 
-在上面的例子中，当你点击按钮，没有任何视觉指示表明导航正在进行。为了添加指示器，你可以用 [`useTransition`](/reference/react/useTransition) 替换 [`startTransition`](/reference/react/startTransition)，它会给你一个布尔值 `isPending`。在下面的例子中，它被用于当 transition 发生时改变网站头部的样式：
+在上面的例子中，当你点击按钮，没有任何视觉指示表明导航正在进行。为了添加指示器，你可以用 [`useTransition`](/reference/react/useTransition) 替换 [`startTransition`](/reference/react/startTransition)，它会给你一个布尔值 `isPending`。在下面的例子中，它被用于当 Transition 发生时改变网站头部的样式：
 
 <Sandpack>
-
-```json package.json hidden
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
 
 ```js src/App.js
 import { Suspense, useState, useTransition } from 'react';
@@ -2252,14 +1802,9 @@ function AlbumsGlimmer() {
 }
 ```
 
-```js src/Albums.js hidden
+```js src/Albums.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
@@ -2273,41 +1818,11 @@ export default function Albums({ artistId }) {
     </ul>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Biography.js hidden
+```js src/Biography.js
+import {use} from 'react';
 import { fetchData } from './data.js';
-
-// 注意：这个组件使用了一个实验性的 API
-// 该 API 并未在 React 的稳定版本中可用
-
-// 对于一个现实的例子，你可以尝试一个
-// 与 Suspense 集成的框架，例如 Relay 或 Next.js。
 
 export default function Biography({ artistId }) {
   const bio = use(fetchData(`/${artistId}/bio`));
@@ -2317,34 +1832,9 @@ export default function Biography({ artistId }) {
     </section>
   );
 }
-
-// 这是一个解决 bug 的临时方案，以便让演示运行起来。
-// TODO：当 bug 修复后，用真正的实现替换。
-function use(promise) {
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },      
-    );
-    throw promise;
-  }
-}
 ```
 
-```js src/Panel.js hidden
+```js src/Panel.js
 export default function Panel({ children }) {
   return (
     <section className="panel">
@@ -2502,13 +1992,13 @@ main {
 
 ### 在导航时重置 Suspense 边界 {/*resetting-suspense-boundaries-on-navigation*/}
 
-在 transition 发生时，React 将避免隐藏已经显示的内容。但是，如果你导航到具有不同参数的路由，你可能想告诉 React 它是 **不同** 的内容。你可以用 `key` 表示这一点：
+在 Transition 发生时，React 将避免隐藏已经显示的内容。但是，如果你导航到具有不同参数的路由，你可能想告诉 React 它是 **不同** 的内容。你可以用 `key` 表示这一点：
 
 ```js
 <ProfilePage key={queryParams.id} />
 ```
 
-想想在用户的个人资料页面中导航，然后暂停了。如果更新被包装在 transition 中，它将不会触发已经可见内容的后备方案。这是预期的行为。
+想想在用户的个人资料页面中导航，然后暂停了。如果更新被包装在 Transition 中，它将不会触发已经可见内容的后备方案。这是预期的行为。
 
 然而，现在想象一下你在两个不同的用户资料之间导航。在这种情况下，显示后备方案是有意义的。例如，一个用户的时间线是与另一个用户的时间线是 **不同的内容**。通过指定一个 `key`，你可以确保 React 将不同用户的个人资料视为不同的组件，并在导航期间重置 Suspense 边界。集成 Suspense 的路由应该自动执行此操作。
 
@@ -2545,7 +2035,7 @@ function Chat() {
 
 使用后备方案替换一个可见的 UI 会带来令人不快的用户体验。当一个更新导致一个组件被挂起时，而最近的 Suspense 边界已经向用户显示了内容时，这种情况可能发生。
 
-为了防止这种情况发生，[使用 `startTransition` 将更新标记为非紧急的](#preventing-already-revealed-content-from-hiding)。在 transition 期间，React 将等待足够的数据加载，以防止不需要的后备方案出现：
+为了防止这种情况发生，[使用 `startTransition` 将更新标记为非紧急的](#preventing-already-revealed-content-from-hiding)。在 Transition 期间，React 将等待足够的数据加载，以防止不需要的后备方案出现：
 
 ```js {2-3,5}
 function handleNextPageClick() {

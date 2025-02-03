@@ -166,7 +166,7 @@ const [requestState, setRequestState] = useState<RequestState>({ status: 'idle' 
 
 ### `useReducer` {/*typing-usereducer*/}
 
-[`useReducer`](/reference/react/useReducer) 是一个更复杂的 Hook，它接受一个 reducer 函数和一个初始 state 作为参数，并将从初始 state 推断出 reducer 函数的类型。你可以选择性地为 `useReducer` 提供类型参数以为 state 提供类型。但是更高的做法仍然是在初始 state 上添加类型：
+[`useReducer`](/reference/react/useReducer) 是一个更复杂的 Hook，它接受一个 reducer 函数和一个初始 state 作为参数，并将从初始 state 推断出 reducer 函数的类型。你可以选择性地为 `useReducer` 提供类型参数以为 state 提供类型。但是更好的做法仍然是在初始 state 上添加类型：
 
 <Sandpack>
 
@@ -228,7 +228,7 @@ export default App = AppTSX;
 - `const initialState: State` 为初始 state 提供类型，并且也将成为 `useReducer` 默认使用的类型。
 - `stateReducer(state: State, action: CounterAction): State` 设置了 reducer 函数参数和返回值的类型。
 
-为 `useReducer` 提供类型参数的更明确的替代方法是在 `initialState` 上设置类型：
+除了在 `initialState` 上设置类型外，一个更明确的替代方法是为 `useReducer` 提供一个类型参数：
 
 ```ts
 import { stateReducer, State } from './your-reducer-implementation';
@@ -456,7 +456,7 @@ interface MyComponentProps {
 
  - [TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/) 涵盖了大多数关键的语言特性。
 
- - [TypeScript 发布笔记](https://devblogs.microsoft.com/typescript/) 深入介绍了每一个新特性。
+ - [TypeScript 发布日志](https://devblogs.microsoft.com/typescript/) 深入介绍了每一个新特性。
 
  - [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/) 是一个社区维护的，用于在 React 中使用 TypeScript 的速查表，涵盖了许多有用的边界情况，并提供了比本文更广泛全面的内容。
 

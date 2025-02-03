@@ -1,5 +1,8 @@
 ---
 title: "回顾 React Conf 2021"
+author: Jesslyn Tannady and Rick Hanlon
+date: 2021/12/17
+description: 上周，我们举办了第六届 React Conf。在以往的几年中，我们在 React Conf 的舞台上发布了行业改变的信息，如 React Native 和 React Hooks。今年，我们从发布 React 18 和逐步采用并发功能开始，分享了我们对 React 的多平台愿景。
 ---
 
 2021 年 12 月 17 日 [Jesslyn Tannady](https://twitter.com/jtannady) 与 [Rick Hanlon](https://twitter.com/rickhanlonii)
@@ -128,7 +131,7 @@ React 18 还包括使用 Suspense 对服务端渲染性能的改进。
 
 首先，感谢所有演讲者 [Aakansha Doshi](https://twitter.com/aakansha1216),、 [Andrew Clark](https://twitter.com/acdlite)、[Brian Vaughn](https://twitter.com/brian_d_vaughn)、[Daishi Kato](https://twitter.com/dai_shi)、[Debbie O'Brien](https://twitter.com/debs_obrien)、[Delba de Oliveira](https://twitter.com/delba_oliveira)、[Diego Haz](https://twitter.com/diegohaz)、[Eric Rozell](https://twitter.com/EricRozell)、[Helen Lin](https://twitter.com/wizardlyhel)、[Juan Tejada](https://twitter.com/_jstejada)、[Lauren Tan](https://twitter.com/potetotes)、[Linton Ye](https://twitter.com/lintonye)、[Lyle Troxell](https://twitter.com/lyle)、[Rachel Nabors](https://twitter.com/rachelnabors)、[Rick Hanlon](https://twitter.com/rickhanlonii)、[Robert Balicki](https://twitter.com/StatisticsFTW)、[Roman Rädle](https://twitter.com/raedle)、[Sarah Rainsberger](https://twitter.com/sarah11918)、[Shaundai Person](https://twitter.com/shaundai)、[Shruti Kapoor](https://twitter.com/shrutikapoor08)、[Steven Moyes](https://twitter.com/moyessa)、[Tafu Nakazaki](https://twitter.com/hawaiiman0) 和 [Xuan Huang (黄玄)](https://twitter.com/Huxpro)。
 
-感谢所有为会谈提供反馈的人，包括  [Andrew Clark](https://twitter.com/acdlite)、[Dan Abramov](https://twitter.com/dan_abramov)、[Dave McCabe](https://twitter.com/mcc_abe)、[Eli White](https://twitter.com/Eli_White)、[Joe Savona](https://twitter.com/en_JS)、 [Lauren Tan](https://twitter.com/potetotes)、[Rachel Nabors](https://twitter.com/rachelnabors) 和 [Tim Yung](https://twitter.com/yungsters)。
+感谢所有为会谈提供反馈的人，包括  [Andrew Clark](https://twitter.com/acdlite)、[Dan Abramov](https://bsky.app/profile/danabra.mov)、[Dave McCabe](https://twitter.com/mcc_abe)、[Eli White](https://twitter.com/Eli_White)、[Joe Savona](https://twitter.com/en_JS)、 [Lauren Tan](https://twitter.com/potetotes)、[Rachel Nabors](https://twitter.com/rachelnabors) 和 [Tim Yung](https://twitter.com/yungsters)。
 
 感谢 [Lauren Tan](https://twitter.com/potetotes) 组织了 Discord 会议并担任我们的 Discord 管理员。
 

@@ -41,11 +41,11 @@ function TodosApp() {
 
 #### 参数 {/*parameters*/}
 
-* `subscribe`：一个函数，接收一个单独的 `callback` 参数并把它订阅到 store 上。当 store 发生改变，它应当调用被提供的 `callback`。这会导致组件重新渲染。`subscribe` 函数会返回清除订阅的函数。
+* `subscribe`：一个函数，接收一个单独的 `callback` 参数并把它订阅到 store 上。当 store 发生改变时会调用提供的 `callback`，这将导致 React 重新调用 `getSnapshot` 并在需要的时候重新渲染组件。`subscribe` 函数会返回清除订阅的函数。
 
 * `getSnapshot`：一个函数，返回组件需要的 store 中的数据快照。在 store 不变的情况下，重复调用 `getSnapshot` 必须返回同一个值。如果 store 改变，并且返回值也不同了（用 [`Object.is`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/is) 比较），React 就会重新渲染组件。
 
-* **可选** `getServerSnapshot`：一个函数，返回 store 中数据的初始快照。它只会在服务端渲染时，以及在客户端进行服务端渲染内容的 hydration 时被用到。快照在服务端与客户端之间必须相同，它通常是从服务端序列化并传到客户端的。如果你忽略此参数，在服务端渲染这个组件会抛出一个错误。
+* **可选** `getServerSnapshot`：一个函数，返回 store 中数据的初始快照。它只会在服务端渲染时，以及在客户端进行服务端渲染内容的激活时被用到。快照在服务端与客户端之间必须相同，它通常是从服务端序列化并传到客户端的。如果你忽略此参数，在服务端渲染这个组件会抛出一个错误。
 
 #### 返回值 {/*returns*/}
 
@@ -57,9 +57,9 @@ function TodosApp() {
 
 * 如果在重新渲染时传入一个不同的 `subscribe` 函数，React 会用新传入的 `subscribe` 函数重新订阅该 store。你可以通过在组件外声明 `subscribe` 来避免。
 
-* 如果在 [非阻塞 transition 更新](/reference/react/useTransition) 过程中更改了 store，React 将会回退并将该更新视为阻塞更新。具体来说，在每次 transition 更新时，React 将在将更改应用到 DOM 之前第二次调用 `getSnapshot`。如果它返回的值与最初调用时不同，React 将重新从头开始进行更新，这次将其作为阻塞更新应用，以确保屏幕上的每个组件都反映 store 的相同版本。
+* 如果在 [非阻塞 Transition 更新](/reference/react/useTransition) 过程中更改了 store，React 将会回退并将该更新视为阻塞更新。具体来说，在每次 Transition 更新时，React 将在将更改应用到 DOM 之前第二次调用 `getSnapshot`。如果它返回的值与最初调用时不同，React 将重新从头开始进行更新，这次将其作为阻塞更新应用，以确保屏幕上的每个组件都反映 store 的相同版本。
 
-* 不建议根据 `useSyncExternalStore` 返回的 store 值暂停渲染。原因是对外部 store 的变更无法 [被标记为非阻塞 transition 更新](/reference/react/useTransition)，因此它们会触发最近的 [`Suspense` 后备方案](/reference/react/Suspense)，用加载旋转器替换已经呈现在屏幕上的内容，通常会导致较差的用户体验。
+* 不建议根据 `useSyncExternalStore` 返回的 store 值暂停渲染。原因是对外部 store 的变更无法 [被标记为非阻塞 Transition 更新](/reference/react/useTransition)，因此它们会触发最近的 [`Suspense` 后备方案](/reference/react/Suspense)，用加载旋转器替换已经呈现在屏幕上的内容，通常会导致较差的用户体验。
 
   例如，以下操作是不建议的：
 
@@ -361,7 +361,7 @@ function subscribe(callback) {
 - 在服务端生成 HTML 时。
 - 在客户端 [hydration](/reference/react-dom/client/hydrateRoot) 时，即：当 React 拿到服务端的 HTML 并使其可交互。
 
-This lets you provide the initial snapshot value which will be used before the app becomes interactive. If there is no meaningful initial value for the server rendering, omit this argument to [force rendering on the client.](/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content)
+这让你提供初始快照值，该值将在应用程序变得可交互之前被使用。如果对于服务器渲染来说没有一个合适的初始值，则省略此参数以 [强制在客户端上进行渲染](/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content)。
 
 <Note>
 
